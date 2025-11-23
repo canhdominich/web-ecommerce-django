@@ -78,16 +78,34 @@
                   
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Sản phẩm
+                      <i class="fas fa-box me-1"></i>Sản phẩm
                     </a>
                     <ul class="dropdown-menu">
-                      {% comment %}  {% endcomment %}
-                      {% for i in categories %}
-                      <li><a class="dropdown-item" href="{% url 'category' %}?category={{i.slug}}">{{i.name}}</a></li>
-                      {%endfor%}
-                      {% comment %} <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><hr class="dropdown-divider"></li> {% endcomment %}
-                      {% comment %} <li><a class="dropdown-item" href="#">Something else here</a></li> {% endcomment %}
+                      {% for category in categories %}
+                        {% if category.subcategories.all %}
+                          <!-- Category có sub menu -->
+                          <li class="dropdown dropend">
+                            <a class="dropdown-item d-flex justify-content-between align-items-center" href="{% url 'category' %}?category={{category.slug}}">
+                              <span><i class="fas fa-folder me-2"></i>{{category.name}}</span>
+                            </a>
+                            <ul class="dropdown-menu submenu">
+                              <li><hr class="dropdown-divider"></li>
+                              {% for subcategory in category.subcategories.all %}
+                              <li><a class="dropdown-item" href="{% url 'category' %}?category={{subcategory.slug}}">
+                                <i class="fas fa-folder-open me-2"></i>{{subcategory.name}}
+                              </a></li>
+                              {% endfor %}
+                            </ul>
+                          </li>
+                        {% else %}
+                          <!-- Category không có sub menu -->
+                          <li><a class="dropdown-item" href="{% url 'category' %}?category={{category.slug}}">
+                            <i class="fas fa-tag me-2"></i>{{category.name}}
+                          </a></li>
+                        {% endif %}
+                      {% empty %}
+                        <li><a class="dropdown-item text-muted" href="#"><i class="fas fa-info-circle me-2"></i>Chưa có danh mục</a></li>
+                      {% endfor %}
                     </ul>
                   </li>
                   <li class="nav-item">

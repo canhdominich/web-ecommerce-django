@@ -28,3 +28,45 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Nested Dropdown Menu (Menu 2 cấp)
+document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý dropdown menu 2 cấp
+    var dropdownElements = document.querySelectorAll('.dropdown.dropend');
+    
+    dropdownElements.forEach(function(element) {
+        var submenu = element.querySelector('.submenu');
+        var submenuTrigger = element.querySelector('.submenu-trigger');
+        
+        if (submenu) {
+            // Hover để mở submenu
+            element.addEventListener('mouseenter', function() {
+                submenu.classList.add('show');
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                submenu.classList.remove('show');
+            });
+            
+            // Click vào icon để mở submenu trên mobile
+            if (submenuTrigger) {
+                submenuTrigger.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 991) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        submenu.classList.toggle('show');
+                    }
+                });
+            }
+        }
+    });
+    
+    // Đóng tất cả submenu khi click bên ngoài
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown.dropend')) {
+            document.querySelectorAll('.submenu.show').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+        }
+    });
+});
+

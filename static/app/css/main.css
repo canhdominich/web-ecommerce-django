@@ -475,6 +475,80 @@ body {
     transform: translateX(5px);
 }
 
+/* Nested Dropdown (Menu 2 cấp) */
+.dropdown.dropend {
+    position: relative;
+}
+
+.dropdown.dropend .submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0.125rem;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    display: block;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+    transform: translateX(-10px);
+    z-index: 1000;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+}
+
+.dropdown.dropend:hover .submenu,
+.dropdown.dropend .submenu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* Đảm bảo dropdown cha có z-index cao hơn */
+.navbar-nav .dropdown-menu {
+    z-index: 1050;
+}
+
+/* Icon cho nested menu */
+.dropdown.dropend .submenu-trigger {
+    transition: transform 0.3s ease;
+    font-size: 0.75rem;
+}
+
+.dropdown.dropend:hover .submenu-trigger {
+    transform: translateX(3px);
+}
+
+/* Responsive nested dropdown */
+@media (max-width: 991px) {
+    .dropdown.dropend > .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        margin-left: 0;
+        background-color: rgba(0,0,0,0.05);
+        border: 0;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        display: none;
+    }
+    
+    .dropdown.dropend > .dropdown-menu.show {
+        display: block;
+    }
+    
+    .dropdown.dropend .dropdown-item {
+        padding-left: 2rem;
+    }
+    
+    .dropdown.dropend .dropdown-toggle::after {
+        transform: rotate(0deg);
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .thumbnail {
