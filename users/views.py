@@ -54,24 +54,34 @@ def logout_view(request):
 
 @login_required
 def profile(request):
-    customer, created = Customer.objects.get_or_create(
-        user=request.user,
-        defaults={
-            'name': '',
-            'locality': '',
-            'city': '',
-            'mobile': '',
-            'zipcode': None
-        }
-    )
-    form = CustomerProfileForm(instance=customer)
+    # Lấy Customer đầu tiên của user (hoặc tạo mới nếu chưa có)
+    customer = Customer.objects.filter(user=request.user).first()
+    
+    if not customer:
+        # Nếu chưa có Customer nào, tạo mới
+        customer = Customer.objects.create(
+            user=request.user,
+            name='',
+            locality='',
+            city='',
+            mobile='',
+            zipcode=None
+        )
     
     if request.method == 'POST':
-        form = CustomerProfileForm(request.POST, instance=customer)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Thông tin đã được cập nhật!')
-            return redirect('profile')
+        # Cập nhật thông tin từ POST data
+        customer.name = request.POST.get('name', '')
+        customer.locality = request.POST.get('locality', '')
+        customer.city = request.POST.get('city', '')
+        customer.mobile = request.POST.get('mobile', '')
+        zipcode_str = request.POST.get('zipcode', '')
+        customer.zipcode = int(zipcode_str) if zipcode_str and zipcode_str.isdigit() else None
+        customer.save()
+        messages.success(request, 'Thông tin đã được cập nhật!')
+        return redirect('profile')
+    
+    # Tạo form để hiển thị labels (không dùng để render input)
+    form = CustomerProfileForm(instance=customer)
     
     context = {'form': form, 'customer': customer}
     return render(request, 'app/profile.html', context)

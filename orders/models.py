@@ -18,23 +18,23 @@ class Cart(models.Model):
         return f"{self.user.username} - {self.product.title} - {self.quantity}"
 
 STATUS_CHOICES = (
-    ('pending', 'Pending'),
-    ('accepted', 'Accepted'),
-    ('packed', 'Packed'),
-    ('on_the_way', 'On The Way'),
-    ('delivered', 'Delivered'),
-    ('cancelled', 'Cancelled'),
+    ('pending', 'Chờ xử lý'),
+    ('accepted', 'Đã chấp nhận'),
+    ('packed', 'Đã đóng gói'),
+    ('on_the_way', 'Đang giao hàng'),
+    ('delivered', 'Đã giao hàng'),
+    ('cancelled', 'Đã hủy'),
 )
 
 PAYMENT_METHOD_CHOICES = (
-    ('cod', 'Cash On Delivery'),
-    ('online', 'Online Payment'),
+    ('cod', 'Thanh toán khi nhận hàng'),
+    ('online', 'Thanh toán online'),
 )
 
 PAYMENT_STATUS_CHOICES = (
-    ('pending', 'Pending'),
-    ('success', 'Success'),
-    ('failed', 'Failed'),
+    ('pending', 'Chờ thanh toán'),
+    ('success', 'Thanh toán thành công'),
+    ('failed', 'Thanh toán thất bại'),
 )
 
 class Payment(models.Model):

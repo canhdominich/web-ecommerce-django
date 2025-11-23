@@ -27,40 +27,84 @@
                     </div>
                     {% endif %}
 
+                    <!-- Debug info (có thể xóa sau) -->
+                    {% if customer %}
+                    <div class="alert alert-info mb-3">
+                        <small>Customer ID: {{ customer.id }}, Name: {{ customer.name|default:"(trống)" }}, City: {{ customer.city|default:"(trống)" }}</small>
+                    </div>
+                    {% endif %}
+
                     <form method="POST" action="{% url 'profile' %}">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="id_name" class="form-label fw-bold">
                                 <i class="fas fa-user me-2 text-primary"></i>{{ form.name.label }}
                             </label>
-                            {{form.name}}
-                            {% if form.name.help_text %}
-                            <small class="form-text text-muted">{{ form.name.help_text }}</small>
+                            <input type="text" 
+                                   name="name" 
+                                   id="id_name" 
+                                   class="form-control" 
+                                   value="{{ customer.name|default:'' }}" 
+                                   placeholder="Nhập họ tên" />
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>
                             {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="id_locality" class="form-label fw-bold">
                                 <i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ form.locality.label }}
                             </label>
-                            {{form.locality}}
+                            <input type="text" 
+                                   name="locality" 
+                                   id="id_locality" 
+                                   class="form-control" 
+                                   value="{{ customer.locality|default:'' }}" 
+                                   placeholder="Nhập địa chỉ" />
+                            {% if form.locality.errors %}
+                                <div class="text-danger small mt-1">{{ form.locality.errors.0 }}</div>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="id_city" class="form-label fw-bold">
                                 <i class="fas fa-city me-2 text-primary"></i>{{ form.city.label }}
                             </label>
-                            {{form.city}}
+                            <input type="text" 
+                                   name="city" 
+                                   id="id_city" 
+                                   class="form-control" 
+                                   value="{{ customer.city|default:'' }}" 
+                                   placeholder="Nhập thành phố" />
+                            {% if form.city.errors %}
+                                <div class="text-danger small mt-1">{{ form.city.errors.0 }}</div>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="id_mobile" class="form-label fw-bold">
                                 <i class="fas fa-phone me-2 text-primary"></i>{{ form.mobile.label }}
                             </label>
-                            {{form.mobile}}
+                            <input type="text" 
+                                   name="mobile" 
+                                   id="id_mobile" 
+                                   class="form-control" 
+                                   value="{{ customer.mobile|default:'' }}" 
+                                   placeholder="Nhập số điện thoại" />
+                            {% if form.mobile.errors %}
+                                <div class="text-danger small mt-1">{{ form.mobile.errors.0 }}</div>
+                            {% endif %}
                         </div>
                         <div class="mb-4">
                             <label for="id_zipcode" class="form-label fw-bold">
                                 <i class="fas fa-mail-bulk me-2 text-primary"></i>{{ form.zipcode.label }}
                             </label>
-                            {{form.zipcode}}
+                            <input type="number" 
+                                   name="zipcode" 
+                                   id="id_zipcode" 
+                                   class="form-control" 
+                                   value="{{ customer.zipcode|default:'' }}" 
+                                   placeholder="Nhập mã bưu điện (tùy chọn)" />
+                            {% if form.zipcode.errors %}
+                                <div class="text-danger small mt-1">{{ form.zipcode.errors.0 }}</div>
+                            {% endif %}
                             <small class="form-text text-muted">
                                 <i class="fas fa-info-circle me-1"></i>Mã bưu điện là tùy chọn, bạn có thể để trống
                             </small>

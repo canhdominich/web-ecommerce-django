@@ -6,11 +6,11 @@ class CustomerProfileForm(forms.ModelForm):
         model = Customer
         fields = ['name', 'locality', 'city', 'mobile', 'zipcode']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập họ tên'}),
-            'locality': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập địa chỉ'}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập thành phố'}),
-            'mobile': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập số điện thoại'}),
-            'zipcode': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Nhập mã bưu điện (tùy chọn)'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'locality': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
+            'zipcode': forms.NumberInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': 'Họ tên',
@@ -19,4 +19,13 @@ class CustomerProfileForm(forms.ModelForm):
             'mobile': 'Số điện thoại',
             'zipcode': 'Mã bưu điện (tùy chọn)',
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Thêm placeholder sau khi form đã được khởi tạo
+        self.fields['name'].widget.attrs['placeholder'] = 'Nhập họ tên'
+        self.fields['locality'].widget.attrs['placeholder'] = 'Nhập địa chỉ'
+        self.fields['city'].widget.attrs['placeholder'] = 'Nhập thành phố'
+        self.fields['mobile'].widget.attrs['placeholder'] = 'Nhập số điện thoại'
+        self.fields['zipcode'].widget.attrs['placeholder'] = 'Nhập mã bưu điện (tùy chọn)'
 

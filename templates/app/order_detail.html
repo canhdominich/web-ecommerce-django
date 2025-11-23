@@ -36,9 +36,15 @@
             <hr>
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Thông tin thanh toán</h5>
+                    <h5>Thông tin đơn hàng</h5>
+                    <p><strong>Trạng thái đơn hàng:</strong> 
+                        <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'cancelled' %}danger{% elif order.status == 'on_the_way' %}info{% else %}warning{% endif %}">
+                            {{order.get_status_display}}
+                        </span>
+                    </p>
+                    <h5 class="mt-4">Thông tin thanh toán</h5>
                     <p><strong>Phương thức:</strong> {{order.payment.get_payment_method_display}}</p>
-                    <p><strong>Trạng thái:</strong> 
+                    <p><strong>Trạng thái thanh toán:</strong> 
                         <span class="badge bg-{% if order.payment.payment_status == 'success' %}success{% elif order.payment.payment_status == 'failed' %}danger{% else %}warning{% endif %}">
                             {{order.payment.get_payment_status_display}}
                         </span>
