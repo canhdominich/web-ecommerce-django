@@ -5,55 +5,75 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box-element p-4 mb-4">
-                <a class="btn btn-outline-dark" href="{% url 'home' %}">&#x2190; Tiếp tục mua sắm</a>
-                <br><br>
-                <table class="table">
-                    <tr>
-                        <th><h5>Sản phẩm: <strong>{{order.get_cart_items}}</strong></h5></th>
-                        <th><h5>Tổng tiền: <strong>{{order.get_cart_total|floatformat:0}}₫</strong></h5></th>
-                        <th>
-                            <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Thanh toán</a>
-                        </th>
-                    </tr>
-                </table>
+                <a class="btn btn-outline-primary mb-3" href="{% url 'home' %}">
+                    <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm
+                </a>
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="mb-3 mb-md-0">
+                        <h5 class="mb-0">Sản phẩm: <strong class="text-primary">{{order.get_cart_items}}</strong></h5>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                        <h5 class="mb-0">Tổng tiền: <strong class="text-success">{{order.get_cart_total|floatformat:0}}₫</strong></h5>
+                    </div>
+                    <div>
+                        <a class="btn btn-success btn-lg" href="{% url 'checkout' %}">
+                            <i class="fas fa-credit-card me-2"></i>Thanh toán
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <br>
             <div class="box-element p-4">
-                <div class="cart-row mb-3 pb-3 border-bottom">
-                    <div style="flex:2"></div>
-                    <div style="flex:2"><strong>Sản phẩm</strong></div>
-                    <div style="flex:1"><strong>Giá</strong></div>
-                    <div style="flex:1"><strong>Số lượng</strong></div>
-                    <div style="flex:1"><strong>Tổng</strong></div>
+                {% if items %}
+                <div class="d-none d-md-flex mb-3 pb-3 border-bottom fw-bold text-muted">
+                    <div class="col-2"></div>
+                    <div class="col-4">Sản phẩm</div>
+                    <div class="col-2 text-center">Giá</div>
+                    <div class="col-2 text-center">Số lượng</div>
+                    <div class="col-2 text-end">Tổng</div>
                 </div>
                 
                 {% for item in items %}
-                <div class="cart-row mb-3 pb-3 border-bottom">
-                    <div style="flex:2">
+                <div class="cart-row">
+                    <div class="col-12 col-md-2 mb-3 mb-md-0">
                         {% if item.product.product_image %}
-                        <img class="row-image" src="{{item.product.product_image.url}}" style="width: 100px; height: 100px; object-fit: cover;">
+                        <img class="row-image w-100" src="{{item.product.product_image.url}}" style="height: 120px; object-fit: cover;">
                         {% else %}
-                        <div class="img-placeholder" style="width: 100px; height: 100px;">Không có ảnh</div>
+                        <div class="img-placeholder w-100" style="height: 120px;">Không có ảnh</div>
                         {% endif %}
                     </div>
-                    <div style="flex:2"><p>{{item.product.title}}</p></div>
-                    <div style="flex:1"><p>{{item.product.discounted_price|floatformat:0}}₫</p></div>
-                    <div style="flex:1">
-                        <p class="quantity">{{item.quantity}}</p>
-                        <div class="quantity">
-                            <img data-product={{item.product.id}} data-action="add" class="chg-quantity update-cart" src="{% static 'app/images/arrow-up.png' %}" style="cursor: pointer; width: 20px;">
-                            <img data-product={{item.product.id}} data-action="remove" class="chg-quantity update-cart" src="{% static 'app/images/arrow-down.png' %}" style="cursor: pointer; width: 20px;">
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <h6 class="fw-bold">{{item.product.title}}</h6>
+                        <p class="text-muted mb-0 small">{{item.product.discounted_price|floatformat:0}}₫ / sản phẩm</p>
+                    </div>
+                    <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
+                        <p class="fw-bold mb-0">{{item.product.discounted_price|floatformat:0}}₫</p>
+                    </div>
+                    <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <button data-product={{item.product.id}} data-action="remove" class="btn btn-sm btn-outline-secondary update-cart">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity fw-bold">{{item.quantity}}</span>
+                            <button data-product={{item.product.id}} data-action="add" class="btn btn-sm btn-outline-secondary update-cart">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
                     </div>
-                    <div style="flex:1"><p>{{item.total_cost|floatformat:0}}₫</p></div>
-                </div>
-                {% empty %}
-                <div class="text-center py-5">
-                    <p class="text-muted">Giỏ hàng của bạn đang trống!</p>
-                    <a href="{% url 'home' %}" class="btn btn-primary">Tiếp tục mua sắm</a>
+                    <div class="col-12 col-md-2 text-end">
+                        <p class="fw-bold text-success mb-0 fs-5">{{item.total_cost|floatformat:0}}₫</p>
+                    </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                    <h4 class="text-muted mb-3">Giỏ hàng của bạn đang trống!</h4>
+                    <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -5,35 +5,74 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Thông tin cá nhân</h4>
+            <div class="card shadow-lg">
+                <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h4 class="mb-0 text-white">
+                        <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
+                    </h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Vui lòng sửa các lỗi sau:</strong>
+                        <ul class="mb-0 mt-2">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+
                     <form method="POST" action="{% url 'profile' %}">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="id_name" class="form-label">Họ tên</label>
+                            <label for="id_name" class="form-label fw-bold">
+                                <i class="fas fa-user me-2 text-primary"></i>{{ form.name.label }}
+                            </label>
                             {{form.name}}
+                            {% if form.name.help_text %}
+                            <small class="form-text text-muted">{{ form.name.help_text }}</small>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label for="id_locality" class="form-label">Địa chỉ</label>
+                            <label for="id_locality" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ form.locality.label }}
+                            </label>
                             {{form.locality}}
                         </div>
                         <div class="mb-3">
-                            <label for="id_city" class="form-label">Thành phố</label>
+                            <label for="id_city" class="form-label fw-bold">
+                                <i class="fas fa-city me-2 text-primary"></i>{{ form.city.label }}
+                            </label>
                             {{form.city}}
                         </div>
                         <div class="mb-3">
-                            <label for="id_mobile" class="form-label">Số điện thoại</label>
+                            <label for="id_mobile" class="form-label fw-bold">
+                                <i class="fas fa-phone me-2 text-primary"></i>{{ form.mobile.label }}
+                            </label>
                             {{form.mobile}}
                         </div>
-                        <div class="mb-3">
-                            <label for="id_zipcode" class="form-label">Mã bưu điện</label>
+                        <div class="mb-4">
+                            <label for="id_zipcode" class="form-label fw-bold">
+                                <i class="fas fa-mail-bulk me-2 text-primary"></i>{{ form.zipcode.label }}
+                            </label>
                             {{form.zipcode}}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle me-1"></i>Mã bưu điện là tùy chọn, bạn có thể để trống
+                            </small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Cập nhật</button>
-                        <a href="{% url 'address' %}" class="btn btn-outline-secondary">Quản lý địa chỉ</a>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                <i class="fas fa-save me-2"></i>Cập nhật
+                            </button>
+                            <a href="{% url 'address' %}" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-address-book me-2"></i>Quản lý địa chỉ
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>

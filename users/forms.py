@@ -6,10 +6,17 @@ class CustomerProfileForm(forms.ModelForm):
         model = Customer
         fields = ['name', 'locality', 'city', 'mobile', 'zipcode']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'locality': forms.TextInput(attrs={'class': 'form-control'}),
-            'city': forms.TextInput(attrs={'class': 'form-control'}),
-            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
-            'zipcode': forms.NumberInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập họ tên'}),
+            'locality': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập địa chỉ'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập thành phố'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập số điện thoại'}),
+            'zipcode': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Nhập mã bưu điện (tùy chọn)'}),
+        }
+        labels = {
+            'name': 'Họ tên',
+            'locality': 'Địa chỉ',
+            'city': 'Thành phố',
+            'mobile': 'Số điện thoại',
+            'zipcode': 'Mã bưu điện (tùy chọn)',
         }
 

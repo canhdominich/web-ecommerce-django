@@ -1,121 +1,186 @@
 {% extends "app/base.html" %}
-{%load static%}
+{% load static %}
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {% comment %} <h5>Register</h5>
-        <form method = "POST" action="">
-            {% csrf_token %}
-
-            {% comment %} Mặc định của form  {{form.as_p}} muốn sử dụng và css cho nó đẹp cần dùng từng thành phần 1 {% comment %}
-
-            <input type = "submit" name = "Create user"/>
-        </form> 
-        {% endcomment %}
-
-        {% comment %} Bắt đàu css lại {% endcomment %}
-        {% block register %}
-        <section class="vh-100" style="background-color: #eee;">
-            <div class="container h-100">
-              <div class="row d-flex justify-content-center align-items-center h-100">
+{% block register %}
+<section class="min-vh-100 py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container py-5">
+              <div class="row d-flex justify-content-center align-items-center">
                 <div class="col-lg-12 col-xl-11">
-                  <div class="card text-black" style="border-radius: 25px;">
+                <div class="card shadow-lg" style="border-radius: 25px; border: none;">
                     <div class="card-body p-md-5">
                       <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-          
-                          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
-          
-                          {% comment %} Cần phải sử lại :<form class="mx-1 mx-md-4"> {% endcomment %}
+                                <div class="text-center mb-4">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" width="60" height="60" alt="Logo" class="mb-3">
+                                    <h1 class="fw-bold mb-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                        Đăng ký
+                                    </h1>
+                                    <p class="text-muted">Tạo tài khoản mới để bắt đầu mua sắm</p>
+                                </div>
+
+                                {% if form.errors %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Vui lòng sửa các lỗi sau:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                {% endif %}
+
                             <form class="mx-1 mx-md-4" method='POST' action=''> 
-                                {% comment %}  {% endcomment %}
                                 {% csrf_token %}
                                 
                             <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                              <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                {% comment %} Vì đang dùng CSDL của Django nên Mỗi thành phần là 1 input nên là thay input thành thành phần cần , còn không thì có thể thêm trực tiếp vào input  {% endcomment %}
-                                {% comment %} <input type="text" id="form3Example1c" class="form-control" /> {% endcomment %}                               
-                                <label class="form-label" for="form3Example1c">User Name</label>
-                                {{form.username}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_username">
+                                                <i class="fas fa-user me-1"></i>Tên đăng nhập
+                                            </label>
+                                            <input type="text" 
+                                                   name="username" 
+                                                   id="id_username" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập tên đăng nhập"
+                                                   required
+                                                   value="{{ form.username.value|default:'' }}" />
+                                            {% if form.username.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.username.errors.0 }}
+                                                </div>
+                                            {% endif %}
                               </div>
                             </div>
           
                             <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                              <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                {% comment %} <input type="email" id="form3Example3c" class="form-control" /> {% endcomment %}
-                                <label class="form-label" for="form3Example3c">Your Email</label>
-                                {{form.email}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_email">
+                                                <i class="fas fa-envelope me-1"></i>Email
+                                            </label>
+                                            <input type="email" 
+                                                   name="email" 
+                                                   id="id_email" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập email của bạn"
+                                                   required
+                                                   value="{{ form.email.value|default:'' }}" />
+                                            {% if form.email.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.email.errors.0 }}
+                                                </div>
+                                            {% endif %}
                               </div>
                             </div>
 
                             <div class="d-flex flex-row align-items-center mb-4">
-                                <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                                <div data-mdb-input-init class="form-outline flex-fill mb-0">                                 
-                                  <label class="form-label" for="form3Example3c">First Name</label>
-                                  {{form.first_name}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_first_name">
+                                                <i class="fas fa-user me-1"></i>Họ
+                                            </label>
+                                            <input type="text" 
+                                                   name="first_name" 
+                                                   id="id_first_name" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập họ của bạn"
+                                                   value="{{ form.first_name.value|default:'' }}" />
+                                            {% if form.first_name.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.first_name.errors.0 }}
+                                                </div>
+                                            {% endif %}
                                 </div>
                               </div>
 
                               <div class="d-flex flex-row align-items-center mb-4">
-                                <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                                <div data-mdb-input-init class="form-outline flex-fill mb-0">                      
-                                  <label class="form-label" for="form3Example3c">Last Name</label>
-                                  {{form.last_name}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_last_name">
+                                                <i class="fas fa-user me-1"></i>Tên
+                                            </label>
+                                            <input type="text" 
+                                                   name="last_name" 
+                                                   id="id_last_name" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập tên của bạn"
+                                                   value="{{ form.last_name.value|default:'' }}" />
+                                            {% if form.last_name.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.last_name.errors.0 }}
+                                                </div>
+                                            {% endif %}
                                 </div>
                               </div>
           
                             <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                              <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                {% comment %} <input type="password" id="form3Example4c" class="form-control" /> {% endcomment %}
-                                <label class="form-label" for="form3Example4c">Password</label>
-                                {{form.password1}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_password1">
+                                                <i class="fas fa-lock me-1"></i>Mật khẩu
+                                            </label>
+                                            <input type="password" 
+                                                   name="password1" 
+                                                   id="id_password1" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập mật khẩu"
+                                                   required />
+                                            {% if form.password1.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.password1.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                            <small class="form-text text-muted">
+                                                Mật khẩu phải có ít nhất 8 ký tự
+                                            </small>
                               </div>
                             </div>
           
                             <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                              <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                {% comment %} <input type="password" id="form3Example4cd" class="form-control" /> {% endcomment %}
-                                <label class="form-label" for="form3Example4cd">Repeat your password</label>
-                                {{form.password2}}
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="id_password2">
+                                                <i class="fas fa-key me-1"></i>Xác nhận mật khẩu
+                                            </label>
+                                            <input type="password" 
+                                                   name="password2" 
+                                                   id="id_password2" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Nhập lại mật khẩu"
+                                                   required />
+                                            {% if form.password2.errors %}
+                                                <div class="text-danger small mt-1">
+                                                    {{ form.password2.errors.0 }}
+                                                </div>
+                                            {% endif %}
                               </div>
                             </div>
           
-                            {% comment %} Cái này không cần
-                            <div class="form-check d-flex justify-content-center mb-5">
-                              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
-                              <label class="form-check-label" for="form2Example3">
-                                I agree all statements in <a href="#!">Terms of service</a>
-                              </label>
-                            </div> {% endcomment %}
-          
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">                       
-                              {% comment %} Sửa: <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button> {% endcomment %}
-                              <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button>
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <button type="submit" class="btn btn-primary btn-lg px-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 25px;">
+                                            <i class="fas fa-user-plus me-2"></i>Đăng ký
+                                        </button>
+                                    </div>
+
+                                    <p class="text-center h6 mb-4">
+                                        <span class="text-muted">Bạn đã có tài khoản?</span>
+                                        <a href="{% url 'login' %}" class="text-decoration-none fw-bold" style="color: #667eea;">
+                                            Đăng nhập ngay
+                                        </a>
+                                    </p>
+                                </form>
                             </div>
 
-                            <p class="text-center h6 fw-bold mb-5 mx-1 mx-md-4 mt-4">Bạn đã có tài khoản? <a href="{% url 'login' %}">Đăng nhập</a></p>
-          
-                          </form>
-          
-                        </div>
                         <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-          
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                            class="img-fluid" alt="Sample image">
-          
+                                <div class="text-center w-100">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                                         class="img-fluid" 
+                                         alt="Register illustration"
+                                         style="max-height: 500px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));" />
+                                    <h4 class="text-white mt-4 fw-bold">Chào mừng đến với MiniShop!</h4>
+                                    <p class="text-white-50">Tham gia cùng chúng tôi để trải nghiệm mua sắm tuyệt vời</p>
+                                </div>
                         </div>
                       </div>
                     </div>
@@ -124,6 +189,83 @@
               </div>
             </div>
           </section>
-        {% endblock register %}
-    </body>
-</html>
+
+<style>
+    /* Custom styles for register form */
+    .form-control-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-lg:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-outline {
+        position: relative;
+    }
+
+    .form-outline i {
+        color: #667eea;
+    }
+
+    /* Floating label effect */
+    .form-control-lg:focus ~ .form-label,
+    .form-control-lg:not(:placeholder-shown) ~ .form-label {
+        transform: translateY(-1.5rem) scale(0.85);
+        color: #667eea;
+    }
+
+    /* Icon animation */
+    .fa-lg {
+        transition: transform 0.3s ease;
+    }
+
+    .d-flex:hover .fa-lg {
+        transform: scale(1.1);
+    }
+
+    /* Button hover effect */
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991px) {
+        .order-1 {
+            margin-bottom: 2rem;
+        }
+        
+        section {
+            padding: 2rem 0;
+        }
+    }
+    
+    /* Ensure section doesn't overlap footer */
+    section {
+        padding-bottom: 3rem !important;
+    }
+</style>
+
+<script>
+    // Hide footer on register/login pages
+    document.addEventListener('DOMContentLoaded', function() {
+        var footer = document.getElementById('main-footer');
+        if (footer) {
+            footer.style.display = 'none';
+        }
+    });
+</script>
+{% endblock register %}

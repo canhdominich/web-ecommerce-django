@@ -54,7 +54,16 @@ def logout_view(request):
 
 @login_required
 def profile(request):
-    customer, created = Customer.objects.get_or_create(user=request.user)
+    customer, created = Customer.objects.get_or_create(
+        user=request.user,
+        defaults={
+            'name': '',
+            'locality': '',
+            'city': '',
+            'mobile': '',
+            'zipcode': None
+        }
+    )
     form = CustomerProfileForm(instance=customer)
     
     if request.method == 'POST':
@@ -72,11 +81,14 @@ def address(request):
     addresses = Customer.objects.filter(user=request.user)
     
     if request.method == 'POST':
-        name = request.POST.get('name')
-        locality = request.POST.get('locality')
-        city = request.POST.get('city')
-        mobile = request.POST.get('mobile')
-        zipcode = request.POST.get('zipcode')
+        name = request.POST.get('name', '')
+        locality = request.POST.get('locality', '')
+        city = request.POST.get('city', '')
+        mobile = request.POST.get('mobile', '')
+        zipcode_str = request.POST.get('zipcode', '')
+        
+        # Convert zipcode to int or None
+        zipcode = int(zipcode_str) if zipcode_str and zipcode_str.isdigit() else None
         
         Customer.objects.create(
             user=request.user,
