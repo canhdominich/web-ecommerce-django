@@ -1,0 +1,78 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content_checkout %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element p-4 mb-4">
+                <h4 class="mb-4">Thông tin giao hàng</h4>
+                <form method="POST" action="{% url 'buy_now' product.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="customer" class="form-label">Chọn địa chỉ giao hàng</label>
+                        <select class="form-select" name="customer" id="customer" required>
+                            <option value="">-- Chọn địa chỉ --</option>
+                            {% for customer in customers %}
+                            <option value="{{customer.id}}">
+                                {{customer.name}} - {{customer.locality}}, {{customer.city}} - {{customer.mobile}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <a href="{% url 'address' %}" class="btn btn-sm btn-outline-primary mt-2">Thêm địa chỉ mới</a>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Số lượng</label>
+                        <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Phương thức thanh toán</label>
+                        <select class="form-select" name="payment_method" id="payment_method" required>
+                            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="online">Thanh toán online</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-block w-100">Đặt hàng</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="box-element p-4">
+                <h3>Tóm tắt đơn hàng</h3>
+                <hr>
+                <div class="text-center mb-3">
+                    {% if product.product_image %}
+                    <img src="{{product.product_image.url}}" class="img-fluid" style="max-height: 300px;">
+                    {% else %}
+                    <div class="img-placeholder" style="height: 300px;">Không có ảnh</div>
+                    {% endif %}
+                </div>
+                <h4>{{product.title}}</h4>
+                <p class="text-muted">{{product.description|truncatewords:20}}</p>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <h5>Giá:</h5>
+                    <h5>{{product.discounted_price|floatformat:0}}₫</h5>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h5><strong>Tổng tiền:</strong></h5>
+                    <h5><strong id="total-price">{{product.discounted_price|floatformat:0}}₫</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('quantity').addEventListener('input', function() {
+    const quantity = parseInt(this.value) || 1;
+    const price = {{product.discounted_price}};
+    const total = quantity * price;
+    document.getElementById('total-price').textContent = total.toLocaleString('vi-VN') + '₫';
+});
+</script>
+{% endblock content_checkout %}
+

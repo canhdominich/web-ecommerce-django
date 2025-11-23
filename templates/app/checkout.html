@@ -1,0 +1,72 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content_checkout %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element p-4 mb-4">
+                <h4 class="mb-4">Thông tin giao hàng</h4>
+                <form method="POST" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="customer" class="form-label">Chọn địa chỉ giao hàng</label>
+                        <select class="form-select" name="customer" id="customer" required>
+                            <option value="">-- Chọn địa chỉ --</option>
+                            {% for customer in customers %}
+                            <option value="{{customer.id}}">
+                                {{customer.name}} - {{customer.locality}}, {{customer.city}} - {{customer.mobile}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <a href="{% url 'address' %}" class="btn btn-sm btn-outline-primary mt-2">Thêm địa chỉ mới</a>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Phương thức thanh toán</label>
+                        <select class="form-select" name="payment_method" id="payment_method" required>
+                            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="online">Thanh toán online</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-block w-100">Đặt hàng</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="box-element p-4">
+                <a class="btn btn-outline-dark mb-3" href="{% url 'cart' %}">&#x2190; Quay lại giỏ hàng</a>
+                <hr>
+                <h3>Tóm tắt đơn hàng</h3>
+                <hr>
+                {% for item in items %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        {% if item.product.product_image %}
+                        <img src="{{item.product.product_image.url}}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
+                        {% else %}
+                        <div class="img-placeholder" style="width: 60px; height: 60px; margin-right: 10px;">Không có ảnh</div>
+                        {% endif %}
+                        <div>
+                            <p class="mb-0">{{item.product.title}}</p>
+                            <small class="text-muted">Số lượng: {{item.quantity}}</small>
+                        </div>
+                    </div>
+                    <p class="mb-0">{{item.total_cost|floatformat:0}}₫</p>
+                </div>
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <h5>Số lượng sản phẩm:</h5>
+                    <h5>{{order.get_cart_items}}</h5>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h5><strong>Tổng tiền:</strong></h5>
+                    <h5><strong>{{order.get_cart_total|floatformat:0}}₫</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content_checkout %}

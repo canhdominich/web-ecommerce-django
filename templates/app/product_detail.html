@@ -1,0 +1,50 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-5">
+            {% if product.product_image %}
+            <img src="{{product.product_image.url}}" class="img-fluid" alt="{{product.title}}">
+            {% else %}
+            <div class="img-placeholder" style="height: 400px;">Không có ảnh</div>
+            {% endif %}
+        </div>
+        <div class="col-lg-7">
+            <h2>{{product.title}}</h2>
+            <hr>
+            <h3 class="text-danger">{{product.discounted_price|floatformat:0}}₫</h3>
+            {% if product.selling_price > product.discounted_price %}
+            <p><del class="text-muted">{{product.selling_price|floatformat:0}}₫</del></p>
+            {% endif %}
+            <hr>
+            <h5>Mô tả sản phẩm</h5>
+            <p>{{product.description}}</p>
+            {% if product.composition %}
+            <h5>Thành phần</h5>
+            <p>{{product.composition}}</p>
+            {% endif %}
+            {% if product.prodapp %}
+            <h5>Hướng dẫn sử dụng</h5>
+            <p>{{product.prodapp}}</p>
+            {% endif %}
+            <hr>
+            <div class="d-flex gap-2">
+                {% if user.is_authenticated %}
+                <button data-product={{product.id}} data-action="add" class="btn btn-primary update-cart">Thêm vào giỏ hàng</button>
+                <a href="{% url 'buy_now' product.id %}" class="btn btn-success">Mua ngay</a>
+                {% if in_wishlist %}
+                <a href="{% url 'remove_from_wishlist' product.id %}" class="btn btn-danger">Bỏ yêu thích</a>
+                {% else %}
+                <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-outline-danger">Thêm vào yêu thích</a>
+                {% endif %}
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Đăng nhập để mua hàng</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}
+

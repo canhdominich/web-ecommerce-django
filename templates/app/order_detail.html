@@ -1,0 +1,63 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container my-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Chi tiết đơn hàng #{{order.id}}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Thông tin sản phẩm</h5>
+                    <div class="d-flex">
+                        {% if order.product.product_image %}
+                        <img src="{{order.product.product_image.url}}" class="img-fluid me-3" style="max-width: 150px;">
+                        {% else %}
+                        <div class="img-placeholder me-3" style="width: 150px; height: 150px;">Không có ảnh</div>
+                        {% endif %}
+                        <div>
+                            <h6>{{order.product.title}}</h6>
+                            <p class="text-muted">{{order.product.description|truncatewords:30}}</p>
+                            <p><strong>Số lượng:</strong> {{order.quantity}}</p>
+                            <p><strong>Giá:</strong> {{order.product.discounted_price|floatformat:0}}₫</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Thông tin giao hàng</h5>
+                    <p><strong>Người nhận:</strong> {{order.customer.name}}</p>
+                    <p><strong>Địa chỉ:</strong> {{order.customer.locality}}, {{order.customer.city}}</p>
+                    <p><strong>Số điện thoại:</strong> {{order.customer.mobile}}</p>
+                    <p><strong>Mã bưu điện:</strong> {{order.customer.zipcode}}</p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Thông tin thanh toán</h5>
+                    <p><strong>Phương thức:</strong> {{order.payment.get_payment_method_display}}</p>
+                    <p><strong>Trạng thái:</strong> 
+                        <span class="badge bg-{% if order.payment.payment_status == 'success' %}success{% elif order.payment.payment_status == 'failed' %}danger{% else %}warning{% endif %}">
+                            {{order.payment.get_payment_status_display}}
+                        </span>
+                    </p>
+                    {% if order.payment.transaction_id %}
+                    <p><strong>Mã giao dịch:</strong> {{order.payment.transaction_id}}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 text-end">
+                    <h5>Tổng tiền</h5>
+                    <h3 class="text-danger">{{order.total_cost|floatformat:0}}₫</h3>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <a href="{% url 'orders' %}" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}
+

@@ -1,0 +1,44 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container my-5">
+    {% if category %}
+    <h2 class="mb-4">{{category.name}}</h2>
+    {% else %}
+    <h2 class="mb-4">Tất cả sản phẩm</h2>
+    {% endif %}
+    
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                {% if product.product_image %}
+                <img class="card-img-top" src="{{product.product_image.url}}" alt="{{product.title}}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top img-placeholder" style="height: 250px;">Không có ảnh</div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title"><strong>{{product.title}}</strong></h6>
+                    <hr>
+                    <div class="mt-auto">
+                        {% if user.is_authenticated %}
+                        <button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart btn-sm mb-2">Thêm vào giỏ hàng</button>
+                        {% endif %}
+                        <a class="btn btn-outline-success btn-sm mb-2" href="{% url 'product_detail' product.id %}">Xem</a>
+                        <h5 class="mt-2"><strong>{{product.discounted_price|floatformat:0}}₫</strong></h5>
+                        {% if product.selling_price > product.discounted_price %}
+                        <small class="text-muted"><del>{{product.selling_price|floatformat:0}}₫</del></small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">Không có sản phẩm nào trong danh mục này.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main-content %}

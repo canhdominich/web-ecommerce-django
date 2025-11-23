@@ -1,0 +1,49 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container my-5">
+    <h2 class="mb-4">Đơn hàng của tôi</h2>
+    {% for order in orders %}
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-0">Đơn hàng #{{order.id}}</h5>
+                <small class="text-muted">Ngày đặt: {{order.ordered_date|date:"d/m/Y H:i"}}</small>
+            </div>
+            <div>
+                <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                    {{order.get_status_display}}
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    {% if order.product.product_image %}
+                    <img src="{{order.product.product_image.url}}" class="img-fluid" alt="{{order.product.title}}">
+                    {% else %}
+                    <div class="img-placeholder" style="height: 100px;">Không có ảnh</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6>{{order.product.title}}</h6>
+                    <p class="text-muted mb-0">Số lượng: {{order.quantity}}</p>
+                    <p class="text-muted mb-0">Địa chỉ: {{order.customer.locality}}, {{order.customer.city}}</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <h5>{{order.total_cost|floatformat:0}}₫</h5>
+                    <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="text-center py-5">
+        <p class="text-muted">Bạn chưa có đơn hàng nào.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Tiếp tục mua sắm</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock main-content %}
+

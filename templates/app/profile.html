@@ -1,0 +1,44 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Thông tin cá nhân</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'profile' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label">Họ tên</label>
+                            {{form.name}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_locality" class="form-label">Địa chỉ</label>
+                            {{form.locality}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_city" class="form-label">Thành phố</label>
+                            {{form.city}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_mobile" class="form-label">Số điện thoại</label>
+                            {{form.mobile}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_zipcode" class="form-label">Mã bưu điện</label>
+                            {{form.zipcode}}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        <a href="{% url 'address' %}" class="btn btn-outline-secondary">Quản lý địa chỉ</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}
+
